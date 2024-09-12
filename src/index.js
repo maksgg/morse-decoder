@@ -38,28 +38,21 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    let objKeysArr = [];
-  for( let key in MORSE_TABLE) {
-    
-    objKeysArr = key.split('');
-    const mainArr = objKeysArr.map((item) => item == '.' ? 11 : 10);
-    /* console.log(mainArr) */
-    const targetLength = 5;
-    let zero = '00';
-    
-    while(mainArr.length < targetLength) {
-      mainArr.unshift(zero);
-    /*  console.log(mainArr); */
-    }
-    
-    objKeysArr[key] = mainArr.join('');
-    
-    /* console.log(objKeysArr[key]); */
+  const arrBlock = expr.match(/.{1,10}/g) || [];
 
-    if(objKeysArr) {
-      console.log(objKeysArr[key])
+  let decodedMessage = '';
+  for (let segment of arrBlock) {
+    if (segment === '**********') {
+      decodedMessage += ' ';
+    } else {
+      let morseCode = segment
+        .replace(/10/g, '.')
+        .replace(/11/g, '-')
+        .replace(/0/g, ''); 
+      decodedMessage += MORSE_TABLE[morseCode] || '';
     }
   }
+  return decodedMessage;
 }
 
 module.exports = {
